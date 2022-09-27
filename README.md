@@ -13,24 +13,26 @@ For this challenge, 5 different approaches are taken.
 
 ## 1. Conv1D with MFCC Features
 
-For this approach, a feature vector consisting of the mean of the mfcc values and delta mfcc values is used. After building the feature vector, we will use a Conv1D layer to process this input vector. 
+For this approach, a feature vector consisting of the mean of the mfcc values and delta mfcc values is used. After building the feature vector, we will use a Conv1D layer to process this input vector. You can find this approach on Conv1D_with_MFCC_Features.ipynp.
 
 ## 2. Conv1D with MFCC Features and Some Additional Features
 
-For this case, some additional features which may provide more valuable information will be used. To analyze the audio better, airflow insufficiency, aperiodicity, irregular vibration of vocal folds, signal perturbation, increased noise features will be extracted and will be added to the feature vector for this task. Therefore, we will be extracting maximum phonation time, maximum phonation time until voice break, fraction of locally unvoiced frames, number of voice breaks, degree of voice breaks,shimmer,jitter,f0,dfa and hnr values as additional features.
+For this case, some additional features which may provide more valuable information will be used. To analyze the audio better, airflow insufficiency, aperiodicity, irregular vibration of vocal folds, signal perturbation, increased noise features will be extracted and will be added to the feature vector for this task. Therefore, we will be extracting maximum phonation time, maximum phonation time until voice break, fraction of locally unvoiced frames, number of voice breaks, degree of voice breaks,shimmer,jitter,f0,dfa and hnr values as additional features. 
 
 This feature selection method is inspired by the papers [Vocal markers from sustained phonation in Huntington’s Disease](https://arxiv.org/abs/2006.05365) and [Phonatory Dysfunction as a Preclinical Symptom of Huntington Disease](https://www.researchgate.net/publication/268791311_Phonatory_Dysfunction_as_a_Preclinical_Symptom_of_Huntington_Disease).
+You can find this implementation on Conv1D_with_MFCC_Features_and_Some_Additional_Features.ipynp.
 
 ## 3. Conv2D with MFCC Spectograms For Answering/Reading Task
 
-For this approach, we will use a Conv2d model to process the mfcc spectograms. We will only use the recordings answer/reading for this approach. The goal for using only one of these task types is to analyze how the models would behave when we use only one of them. The reason behind the selection of Conv2d is because features engineered on audio data such as spectrograms have marked resemblance to images, in which CNNs excel at recognizing.
+For this approach, we will use a Conv2d model to process the mfcc spectograms. We will only use the recordings answer/reading for this approach. The goal for using only one of these task types is to analyze how the models would behave when we use only one of them. The reason behind the selection of Conv2d is because features engineered on audio data such as spectrograms have marked resemblance to images, in which CNNs excel at recognizing. You can find this implementation on Conv2D_with_MFCC_for_1_input.ipynp
 
 ## 4. Conv2D + Transformer with MFCC Spectograms For Answering/Reading 
-For this model, we will be adding a transformer layer ot the network. Main idea is to feed Conv2D layer and transformer layer with the input feature maps and concatenate the output embeddings at a fully-connected layer. The reason why we will use a transformer is because of their excellent ability to interpret sequential data such as features of the audio waveform represented as a time series
+For this model, we will be adding a transformer layer ot the network. Main idea is to feed Conv2D layer and transformer layer with the input feature maps and concatenate the output embeddings at a fully-connected layer. The reason why we will use a transformer is because of their excellent ability to interpret sequential data such as features of the audio waveform represented as a time series. You can find this implementation on Conv2D+Transformers_with_MFCC_for_1_input.ipynp
+
 ## 5. Conv2D + Transformer with MFCC Spectograms For Both Sustanined Long Vowel and Answering/Reading Tasks
-In this approach, we will be using both types of the recordings. Just like the Approach 4, we will be using 1 Conv2D layer and 1 transformer layer for input feature maps of the each type of the recordings. Then, we will concatenate the output embeddings at a fully-connected layer again. 
+In this approach, we will be using both types of the recordings. Just like the Approach 4, we will be using 1 Conv2D layer and 1 transformer layer for input feature maps of the each type of the recordings. Then, we will concatenate the output embeddings at a fully-connected layer again. You can find this implementation on Conv2D+Transformers_with_MFCC_for_2_inputs.ipynp
 ## Implementation Notes
-Since I was limited with the resources such as RAM and drivers, I wasn't able to use data augmentation methods and more complicated networks. I also had to downsample the audios using a lower sample rate than 22050 Hz. Therefore, these implementations might return different results with a large dataset and a decent hardware resources.
+Since I was limited with the resources such as RAM and drivers, I wasn't able to use data augmentation methods and more complicated networks. I also had to downsample the audios using a lower sample rate than 22050 Hz. Therefore, these implementations might return different results with a large dataset and a decent hardware resources. As an alternative ot Piraat, Surfboard library is used. However, shimmer, jitter and some of the vocal features tend to return NaN values. Therefore, they are not included in the feature extraction.
 
 Since we have a limited dataset, most of the approaches with the highly parameterized models such as Conv2d face the problem of overfitting. 
 | Model            | Accuracy                                                              |
